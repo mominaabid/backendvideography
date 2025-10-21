@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     
     # Third party apps
     'rest_framework',
@@ -27,6 +28,7 @@ INSTALLED_APPS = [
     # Local apps
     'services',
     'portfolio',
+    'about',
 ]
 
 MIDDLEWARE = [
@@ -38,6 +40,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
     
 ]
 
@@ -111,6 +114,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite default port
     "http://127.0.0.1:5173",  # Same as above for IP
     "http://localhost:3000",  # Create React App default port
+    "http://localhost:3000",
+    "http://localhost:8000",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -123,4 +128,12 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
+}
+
+# settings.py
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+    }
 }
