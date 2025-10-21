@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     
     # Local apps
     'services',
+    'portfolio',
 ]
 
 MIDDLEWARE = [
@@ -37,6 +38,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'cinematography_backend.urls'
@@ -104,11 +106,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS Settings
+# CORS Settings
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
+    "http://localhost:5173",  # Vite default port
+    "http://127.0.0.1:5173",  # Same as above for IP
+    "http://localhost:3000",  # Create React App default port
 ]
 
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_CREDENTIALS = True
 
 # REST Framework Settings
