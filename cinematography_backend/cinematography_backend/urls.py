@@ -9,6 +9,7 @@ urlpatterns = [
     path('portfolio/', include('portfolio.urls')),
     path('about/', include('about.urls')),
     path('api/contact/', include('contact.urls')), 
+    path('home/', include('home.urls')),
 ]
 
 # Serve media files in development
