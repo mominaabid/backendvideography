@@ -10,6 +10,7 @@ urlpatterns = [
     path('about/', include('about.urls')),
     path('api/contact/', include('contact.urls')), 
     path('home/', include('home.urls')),
+    path('api/', include('project.urls')),
 ]
 
 # Serve media files in development
