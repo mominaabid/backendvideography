@@ -1,4 +1,7 @@
-from vercel_python_wsgi import VercelWSGIHandler
-from cinematography_backend.wsgi import application
+from vercel_python_wsgi import VercelWSGIApp
+from django.core.wsgi import get_wsgi_application
+import os
 
-handler = VercelWSGIHandler(application)
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cinematography_backend.settings')
+application = get_wsgi_application()
+app = VercelWSGIApp(application)
