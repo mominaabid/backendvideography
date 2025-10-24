@@ -1,7 +1,18 @@
-from django.contrib import admin
-from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
+import importlib
+
+try:
+    admin = importlib.import_module('django.contrib.admin')
+except ImportError as e:
+    raise ImportError("Django is not installed; install Django to run this project") from e
+
+_urls = importlib.import_module('django.urls')
+path = _urls.path
+include = _urls.include
+
+_conf = importlib.import_module('django.conf')
+settings = _conf.settings
+
+static = importlib.import_module('django.conf.urls.static').static
 
 urlpatterns = [
     path('admin/', admin.site.urls),

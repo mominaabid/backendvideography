@@ -72,7 +72,7 @@ WSGI_APPLICATION = 'cinematography_backend.wsgi.application'
 # PostgreSQL Database Configuration
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL')
+        default=os.environ.get('DATABASE_URL', 'postgresql://neondb_owner:npg_NvYTF4w9sUAm@ep-muddy-flower-a1e5s9km-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require')
     )
 }
 
