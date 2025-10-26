@@ -8,6 +8,12 @@ from .views import (
     site_stats_view
 )
 
+from .views import UploadMediaView
+
+urlpatterns = [
+    path('upload/', UploadMediaView.as_view(), name='upload-media'),
+]
+
 router = DefaultRouter()
 router.register(r'services', ServiceViewSet, basename='service')
 router.register(r'process-steps', ProcessStepViewSet, basename='processstep')

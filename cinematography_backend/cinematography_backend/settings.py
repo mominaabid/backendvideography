@@ -4,6 +4,9 @@ Django settings for cinematography_backend project.
 
 import os
 from pathlib import Path
+import cloudinary
+from cloudinary import uploader, api
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -11,11 +14,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-your-secret-key-here-change-this-later-12345'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
+
 
 ALLOWED_HOSTS = ['*']
 
+# -------------------------------------------------------------------
 # Application definition
+# -------------------------------------------------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -24,9 +30,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    # Third party apps
+    # Third-party apps
     'rest_framework',
     'corsheaders',
+    'cloudinary',
+    'cloudinary_storage',
     
     # Local apps
     'services',
@@ -69,7 +77,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cinematography_backend.wsgi.application'
 
-# Database
+# -------------------------------------------------------------------
+# Database (PostgreSQL on Neon)
+# -------------------------------------------------------------------
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -84,63 +94,74 @@ DATABASES = {
     }
 }
 
-# Password validation
+# -------------------------------------------------------------------
+# Cloudinary Storage (for images & videos)
+# -------------------------------------------------------------------
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('dp1gkt6tp'),
+    'API_KEY': os.getenv('542787591385464'),
+    'API_SECRET': os.getenv('WgzVxby9l4PdZPiXc26u2AkZlLI'),
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+MEDIA_URL = '/media/'
+
+cloudinary.config( 
+  cloud_name = "dp1gkt6tp",       # e.g. "djd123abc"
+  api_key = "542787591385464",             # from your Cloudinary dashboard
+  api_secret = "WgzVxby9l4PdZPiXc26u2AkZlLI",       # from your Cloudinary dashboard
+  secure = True
+)
+# -------------------------------------------------------------------
+# Static Files
+# -------------------------------------------------------------------
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# -------------------------------------------------------------------
+# Password Validation
+# -------------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# -------------------------------------------------------------------
 # Internationalization
+# -------------------------------------------------------------------
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
+# -------------------------------------------------------------------
 # Default primary key field type
+# -------------------------------------------------------------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# -------------------------------------------------------------------
 # CORS Settings
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:5173",
-#     "http://127.0.0.1:5173",
-#     "http://localhost:3000",
-#     "http://localhost:8000",
-# ]
-# CORS Settings
+# -------------------------------------------------------------------
 CORS_ALLOW_ALL_ORIGINS = True
-
-
 CORS_ALLOW_CREDENTIALS = True
 
-# REST Framework Settings
+# -------------------------------------------------------------------
+# REST Framework
+# -------------------------------------------------------------------
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
 }
 
+# -------------------------------------------------------------------
 # Cache settings
+# -------------------------------------------------------------------
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',

@@ -4,6 +4,28 @@ from rest_framework import viewsets, filters
 from .models import AboutHero, Stat, CoreValue, TimelineEvent, Skill, AboutCTA, AboutTabContent
 from .serializers import AboutHeroSerializer, StatSerializer, CoreValueSerializer, TimelineEventSerializer, SkillSerializer, AboutCTASerializer, AboutTabContentSerializer
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
+from .models import MediaFile
+
+class UploadMediaView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request):
+        file = request.data.get('file')
+        title = request.data.get('title', 'Untitled')
+
+        if not file:
+            return Response({"error": "No file provided."}, status=400)
+
+        media = MediaFile.objects.create(title=title, file=file)
+        return Response({
+            "id": media.id,
+            "title": media.title,
+            "file_url": media.file.url,
+        })
+
 class AboutHeroViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = AboutHero.objects.filter(is_active=True)
     serializer_class = AboutHeroSerializer

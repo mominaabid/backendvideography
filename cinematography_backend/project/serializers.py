@@ -3,6 +3,8 @@
 from rest_framework import serializers
 from .models import PortfolioHero, Project
 
+
+# ------------------- Portfolio Hero -------------------
 class PortfolioHeroSerializer(serializers.ModelSerializer):
     media_url = serializers.SerializerMethodField()
     
@@ -13,24 +15,28 @@ class PortfolioHeroSerializer(serializers.ModelSerializer):
             'title',
             'subtitle',
             'button_text',
-          
             'media_type',
             'media_url',
             'is_active',
             'created_at',
-            'updated_at'
+            'updated_at',
         ]
     
     def get_media_url(self, obj):
-        request = self.context.get('request')
-        media_url = obj.get_media_url()
-        if media_url and request:
-            return request.build_absolute_uri(media_url)
-        return media_url
+        """
+        Return Cloudinary media URL directly (no need to build absolute URI)
+        """
+        try:
+            media_url = obj.get_media_url()
+            if media_url:
+                return media_url
+        except:
+            return None
+        return None
 
 
+# ------------------- Project List -------------------
 class ProjectListSerializer(serializers.ModelSerializer):
-    """Serializer for project list view"""
     media_url = serializers.SerializerMethodField()
     thumbnail_url = serializers.SerializerMethodField()
     technologies_list = serializers.SerializerMethodField()
@@ -47,22 +53,26 @@ class ProjectListSerializer(serializers.ModelSerializer):
             'client',
             'technologies_list',
             'is_featured',
-            'created_at'
+            'created_at',
         ]
     
     def get_media_url(self, obj):
-        request = self.context.get('request')
-        media_url = obj.get_media_url()
-        if media_url and request:
-            return request.build_absolute_uri(media_url)
-        return media_url
+        try:
+            media_url = obj.get_media_url()
+            if media_url:
+                return media_url
+        except:
+            return None
+        return None
     
     def get_thumbnail_url(self, obj):
-        request = self.context.get('request')
-        thumbnail_url = obj.get_thumbnail_url()
-        if thumbnail_url and request:
-            return request.build_absolute_uri(thumbnail_url)
-        return thumbnail_url
+        try:
+            thumbnail_url = obj.get_thumbnail_url()
+            if thumbnail_url:
+                return thumbnail_url
+        except:
+            return None
+        return None
     
     def get_technologies_list(self, obj):
         if obj.technologies:
@@ -70,8 +80,8 @@ class ProjectListSerializer(serializers.ModelSerializer):
         return []
 
 
+# ------------------- Project Detail -------------------
 class ProjectDetailSerializer(serializers.ModelSerializer):
-    """Serializer for project detail view"""
     media_url = serializers.SerializerMethodField()
     thumbnail_url = serializers.SerializerMethodField()
     technologies_list = serializers.SerializerMethodField()
@@ -91,22 +101,26 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
             'technologies_list',
             'is_featured',
             'created_at',
-            'updated_at'
+            'updated_at',
         ]
     
     def get_media_url(self, obj):
-        request = self.context.get('request')
-        media_url = obj.get_media_url()
-        if media_url and request:
-            return request.build_absolute_uri(media_url)
-        return media_url
+        try:
+            media_url = obj.get_media_url()
+            if media_url:
+                return media_url
+        except:
+            return None
+        return None
     
     def get_thumbnail_url(self, obj):
-        request = self.context.get('request')
-        thumbnail_url = obj.get_thumbnail_url()
-        if thumbnail_url and request:
-            return request.build_absolute_uri(thumbnail_url)
-        return thumbnail_url
+        try:
+            thumbnail_url = obj.get_thumbnail_url()
+            if thumbnail_url:
+                return thumbnail_url
+        except:
+            return None
+        return None
     
     def get_technologies_list(self, obj):
         if obj.technologies:

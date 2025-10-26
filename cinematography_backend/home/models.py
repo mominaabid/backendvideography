@@ -1,21 +1,39 @@
-# home/models.py
-
 from django.db import models
-from django.core.validators import FileExtensionValidator, MaxValueValidator, MinValueValidator
+from cloudinary.models import CloudinaryField
 
+
+# ---------------- Media Uploads ----------------
+class MediaFile(models.Model):
+    title = models.CharField(max_length=255)
+    file = CloudinaryField('file', blank=True, null=True, resource_type='auto')  # ✅ handle any type (image/video/pdf)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
+# ---------------- Home Hero Section ----------------
 class HomeHero(models.Model):
     title = models.CharField(max_length=200, help_text="Main title for the hero section")
     typewriter_phrases = models.TextField(
-        help_text="Comma-separated phrases for typewriter effect (e.g., Cinematic Excellence,Visual Storytelling)"
+        help_text="Comma-separated phrases for typewriter effect (e.g., Cinematic Excellence, Visual Storytelling)"
     )
     subtitle = models.TextField(help_text="Subtitle or description for the hero section")
-    video = models.FileField(
-        upload_to='home_hero_videos/',
-        validators=[FileExtensionValidator(allowed_extensions=['mp4', 'webm', 'mov'])],
-        help_text="Upload hero section video (MP4, WebM, or MOV format)"
+
+    # ✅ Cloudinary video field
+    video = CloudinaryField(
+        'video',
+        blank=True,
+        null=True,
+        resource_type='video',  # ensures Cloudinary treats it as a video
     )
-    primary_button_text = models.CharField(max_length=100, default="Watch Portfolio Reel", help_text="Text for the primary button")
-    secondary_button_text = models.CharField(max_length=100, default="View Our Work", help_text="Text for the secondary button")
+
+    primary_button_text = models.CharField(
+        max_length=100, default="Watch Portfolio Reel", help_text="Text for the primary button"
+    )
+    secondary_button_text = models.CharField(
+        max_length=100, default="View Our Work", help_text="Text for the secondary button"
+    )
     is_active = models.BooleanField(default=True, help_text="Display this hero content on the website")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -23,21 +41,28 @@ class HomeHero(models.Model):
     class Meta:
         verbose_name = "Home Hero"
         verbose_name_plural = "Home Hero Sections"
+        ordering = ["-updated_at"]
 
     def __str__(self):
         return self.title
 
+
+# ---------------- Home Stats ----------------
 class HomeStat(models.Model):
     name = models.CharField(max_length=100, help_text="e.g., Projects Completed")
-    value = models.IntegerField(default=0, help_text="Numeric value for the stat (e.g., 500)")
+    value = models.PositiveIntegerField(default=0, help_text="Numeric value for the stat (e.g., 500)")
     suffix = models.CharField(max_length=10, default="+", help_text="Suffix for the stat (e.g., '+')")
-    icon = models.CharField(max_length=50, choices=[
-        ('Calendar', 'Calendar'),
-        ('Users', 'Users'),
-        ('Award', 'Award'),
-        ('MapPin', 'MapPin'),
-    ], default='Calendar')
-    order = models.IntegerField(default=0, help_text="Display order (lower numbers appear first)")
+    icon = models.CharField(
+        max_length=50,
+        choices=[
+            ('Calendar', 'Calendar'),
+            ('Users', 'Users'),
+            ('Award', 'Award'),
+            ('MapPin', 'MapPin'),
+        ],
+        default='Calendar',
+    )
+    order = models.PositiveIntegerField(default=0, help_text="Display order (lower numbers appear first)")
     is_active = models.BooleanField(default=True, help_text="Display this stat on the website")
 
     class Meta:
@@ -48,19 +73,29 @@ class HomeStat(models.Model):
     def __str__(self):
         return f"{self.name} - {self.value}{self.suffix}"
 
+
+# ---------------- Home Intro ----------------
 class HomeIntro(models.Model):
     title = models.CharField(max_length=200, help_text="Main title for the intro section")
     subtitle = models.TextField(help_text="Subtitle or description for the intro section")
-    image = models.ImageField(
-        upload_to='home_intro_images/',
-        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])],
-        help_text="Image for the intro section (JPG, JPEG, or PNG format)"
+
+    # ✅ Cloudinary image field
+    image = CloudinaryField(
+        'image',
+        blank=True,
+        null=True,
+        resource_type='image',  # ensures Cloudinary treats it as an image
     )
+
     achievements = models.TextField(
-        help_text="Comma-separated list of recent achievements (e.g., Vimeo Staff Pick Winner 2023,Wedding Wire Couples Choice Award)"
+        help_text="Comma-separated list of recent achievements (e.g., Vimeo Staff Pick Winner 2023, Wedding Wire Couples Choice Award)"
     )
-    primary_button_text = models.CharField(max_length=100, default="View My Portfolio", help_text="Text for the primary button")
-    secondary_button_text = models.CharField(max_length=100, default="Contact Me", help_text="Text for the secondary button")
+    primary_button_text = models.CharField(
+        max_length=100, default="View My Portfolio", help_text="Text for the primary button"
+    )
+    secondary_button_text = models.CharField(
+        max_length=100, default="Contact Me", help_text="Text for the secondary button"
+    )
     is_active = models.BooleanField(default=True, help_text="Display this intro content on the website")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -68,22 +103,29 @@ class HomeIntro(models.Model):
     class Meta:
         verbose_name = "Home Intro"
         verbose_name_plural = "Home Intro Sections"
+        ordering = ["-updated_at"]
 
     def __str__(self):
         return self.title
 
+
+# ---------------- Reusable Components ----------------
 class HomeSkill(models.Model):
     title = models.CharField(max_length=100, help_text="e.g., Storytelling")
     description = models.TextField(help_text="Description of the skill")
-    icon = models.CharField(max_length=50, choices=[
-        ('PenTool', 'PenTool'),
-        ('Palette', 'Palette'),
-        ('Music', 'Music'),
-        ('Cpu', 'Cpu'),
-        ('MessageCircle', 'MessageCircle'),
-        ('Edit3', 'Edit3'),
-    ], default='PenTool')
-    order = models.IntegerField(default=0, help_text="Display order (lower numbers appear first)")
+    icon = models.CharField(
+        max_length=50,
+        choices=[
+            ('PenTool', 'PenTool'),
+            ('Palette', 'Palette'),
+            ('Music', 'Music'),
+            ('Cpu', 'Cpu'),
+            ('MessageCircle', 'MessageCircle'),
+            ('Edit3', 'Edit3'),
+        ],
+        default='PenTool',
+    )
+    order = models.PositiveIntegerField(default=0, help_text="Display order (lower numbers appear first)")
     is_active = models.BooleanField(default=True, help_text="Display this skill on the website")
 
     class Meta:
@@ -94,15 +136,20 @@ class HomeSkill(models.Model):
     def __str__(self):
         return self.title
 
+
 class HomeService(models.Model):
     title = models.CharField(max_length=100, help_text="e.g., Wedding Films")
     description = models.TextField(help_text="Description of the service")
-    icon = models.CharField(max_length=50, choices=[
-        ('Film', 'Film'),
-        ('Play', 'Play'),
-        ('Award', 'Award'),
-    ], default='Film')
-    order = models.IntegerField(default=0, help_text="Display order (lower numbers appear first)")
+    icon = models.CharField(
+        max_length=50,
+        choices=[
+            ('Film', 'Film'),
+            ('Play', 'Play'),
+            ('Award', 'Award'),
+        ],
+        default='Film',
+    )
+    order = models.PositiveIntegerField(default=0, help_text="Display order (lower numbers appear first)")
     is_active = models.BooleanField(default=True, help_text="Display this service on the website")
 
     class Meta:
@@ -113,15 +160,20 @@ class HomeService(models.Model):
     def __str__(self):
         return self.title
 
+
 class HomeProcess(models.Model):
     title = models.CharField(max_length=100, help_text="e.g., Creative Planning")
     description = models.TextField(help_text="Description of the process step")
-    icon = models.CharField(max_length=50, choices=[
-        ('PenTool', 'PenTool'),
-        ('Camera', 'Camera'),
-        ('Edit3', 'Edit3'),
-    ], default='PenTool')
-    order = models.IntegerField(default=0, help_text="Display order (lower numbers appear first)")
+    icon = models.CharField(
+        max_length=50,
+        choices=[
+            ('PenTool', 'PenTool'),
+            ('Camera', 'Camera'),
+            ('Edit3', 'Edit3'),
+        ],
+        default='PenTool',
+    )
+    order = models.PositiveIntegerField(default=0, help_text="Display order (lower numbers appear first)")
     is_active = models.BooleanField(default=True, help_text="Display this process step on the website")
 
     class Meta:
@@ -132,16 +184,21 @@ class HomeProcess(models.Model):
     def __str__(self):
         return self.title
 
+
 class HomeTool(models.Model):
     title = models.CharField(max_length=100, help_text="e.g., Software")
     description = models.TextField(help_text="Description of the tool")
-    icon = models.CharField(max_length=50, choices=[
-        ('Laptop', 'Laptop'),
-        ('Camera', 'Camera'),
-        ('Workflow', 'Workflow'),
-        ('Wifi', 'Wifi'),
-    ], default='Laptop')
-    order = models.IntegerField(default=0, help_text="Display order (lower numbers appear first)")
+    icon = models.CharField(
+        max_length=50,
+        choices=[
+            ('Laptop', 'Laptop'),
+            ('Camera', 'Camera'),
+            ('Workflow', 'Workflow'),
+            ('Wifi', 'Wifi'),
+        ],
+        default='Laptop',
+    )
+    order = models.PositiveIntegerField(default=0, help_text="Display order (lower numbers appear first)")
     is_active = models.BooleanField(default=True, help_text="Display this tool on the website")
 
     class Meta:
@@ -152,10 +209,11 @@ class HomeTool(models.Model):
     def __str__(self):
         return self.title
 
+
 class HomeFAQ(models.Model):
     question = models.CharField(max_length=200, help_text="e.g., What working hours are manageable for you?")
     answer = models.TextField(help_text="Answer to the FAQ")
-    order = models.IntegerField(default=0, help_text="Display order (lower numbers appear first)")
+    order = models.PositiveIntegerField(default=0, help_text="Display order (lower numbers appear first)")
     is_active = models.BooleanField(default=True, help_text="Display this FAQ on the website")
 
     class Meta:
@@ -165,6 +223,7 @@ class HomeFAQ(models.Model):
 
     def __str__(self):
         return self.question
+
 
 class HomeCTA(models.Model):
     title = models.CharField(max_length=200, help_text="e.g., Ready to Start Your Project?")
@@ -177,6 +236,7 @@ class HomeCTA(models.Model):
     class Meta:
         verbose_name = "Home CTA"
         verbose_name_plural = "Home CTAs"
+        ordering = ["-updated_at"]
 
     def __str__(self):
         return self.title

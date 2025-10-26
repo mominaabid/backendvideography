@@ -11,6 +11,28 @@ from .serializers import (
     ProjectDetailSerializer
 )
 
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
+from .models import MediaFile
+
+class UploadMediaView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request):
+        file = request.data.get('file')
+        title = request.data.get('title', 'Untitled')
+
+        if not file:
+            return Response({"error": "No file provided."}, status=400)
+
+        media = MediaFile.objects.create(title=title, file=file)
+        return Response({
+            "id": media.id,
+            "title": media.title,
+            "file_url": media.file.url,
+        })
+
+
 class PortfolioHeroViewSet(viewsets.ReadOnlyModelViewSet):
     """
     ViewSet for portfolio hero section

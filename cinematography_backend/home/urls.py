@@ -3,6 +3,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import HomeHeroViewSet, HomeStatViewSet, HomeIntroViewSet, HomeSkillViewSet, HomeServiceViewSet, HomeProcessViewSet, HomeToolViewSet, HomeFAQViewSet, HomeCTAViewSet
+from .views import UploadMediaView
 
 router = DefaultRouter()
 router.register(r'hero', HomeHeroViewSet, basename='home_hero')
@@ -17,4 +18,5 @@ router.register(r'cta', HomeCTAViewSet, basename='home_cta')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('upload/', UploadMediaView.as_view(), name='upload-media'),
 ]

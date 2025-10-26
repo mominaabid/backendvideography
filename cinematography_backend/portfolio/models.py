@@ -1,16 +1,26 @@
-# portfolio/models.py
-
 from django.db import models
 from django.core.validators import FileExtensionValidator
+from cloudinary.models import CloudinaryField  # ✅ Add this
 
+# ---------------- Media Uploads ----------------
+class MediaFile(models.Model):
+    title = models.CharField(max_length=255)
+    file = CloudinaryField('file', blank=True, null=True)  # ✅ Cloudinary replaces FileField
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
+# ---------------- Portfolio Category ----------------
 class PortfolioCategory(models.Model):
     name = models.CharField(max_length=100, help_text='e.g., Wedding, Real Estate')
     icon = models.CharField(max_length=50, choices=[
-        ('Sparkles', 'Sparkles'),  # For All Projects
-        ('Heart', 'Heart'),        # For Weddings
+        ('Sparkles', 'Sparkles'),   # For All Projects
+        ('Heart', 'Heart'),         # For Weddings
         ('Building2', 'Building2'), # For Real Estate
         ('MessageCircle', 'MessageCircle'), # For Talking Head
-        ('Film', 'Film'),          # For Commercial
+        ('Film', 'Film'),           # For Commercial
     ], default='Sparkles')
     count = models.IntegerField(default=0, help_text='Number of projects in this category')
     order = models.IntegerField(default=0, help_text='Display order (lower numbers appear first)')
@@ -25,13 +35,10 @@ class PortfolioCategory(models.Model):
         return self.name
 
 
+# ---------------- Hero Slides ----------------
 class HeroSlide(models.Model):
-    image = models.ImageField(upload_to='hero_slides/', help_text='Upload hero slide image')
-    video = models.FileField(
-        upload_to='hero_videos/',
-        validators=[FileExtensionValidator(allowed_extensions=['mp4', 'webm', 'mov'])],
-        help_text='Upload hero slide video (MP4, WebM, or MOV format)'
-    )
+    image = CloudinaryField('image', blank=True, null=True)  # ✅ Cloudinary image
+    video = CloudinaryField('video', blank=True, null=True)  # ✅ Cloudinary video
     title = models.CharField(max_length=100)
     category = models.ForeignKey(PortfolioCategory, on_delete=models.SET_NULL, null=True, blank=True)
     views = models.CharField(max_length=10, default='0', help_text='e.g., 25K')
@@ -49,15 +56,12 @@ class HeroSlide(models.Model):
         return self.title
 
 
+# ---------------- Projects ----------------
 class Project(models.Model):
     title = models.CharField(max_length=100)
     category = models.ForeignKey(PortfolioCategory, on_delete=models.CASCADE, related_name='projects')
-    thumbnail = models.ImageField(upload_to='project_thumbnails/', help_text='Upload project thumbnail image')
-    video = models.FileField(
-        upload_to='project_videos/',
-        validators=[FileExtensionValidator(allowed_extensions=['mp4', 'webm', 'mov'])],
-        help_text='Upload project video (MP4, WebM, or MOV format)'
-    )
+    thumbnail = CloudinaryField('image', blank=True, null=True)  # ✅ Cloudinary image
+    video = CloudinaryField('video', blank=True, null=True)      # ✅ Cloudinary video
     description = models.TextField(help_text='Project description')
     views = models.CharField(max_length=10, default='0', help_text='e.g., 12.5K')
     likes = models.CharField(max_length=10, default='0', help_text='e.g., 2.1K')
