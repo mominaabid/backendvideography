@@ -7,7 +7,6 @@ from pathlib import Path
 import cloudinary
 from cloudinary import uploader, api
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -15,7 +14,6 @@ SECRET_KEY = 'django-insecure-your-secret-key-here-change-this-later-12345'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-
 
 ALLOWED_HOSTS = ['*']
 
@@ -33,9 +31,9 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',
     'corsheaders',
-    'cloudinary',
     'cloudinary_storage',
-    #comenttttttttttttttttt
+    'cloudinary',
+    
     # Local apps
     'services',
     'portfolio',
@@ -78,7 +76,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cinematography_backend.wsgi.application'
 
 # -------------------------------------------------------------------
-# Database (PostgreSQL on Neon)
+# Database (PostgreSQL on Neon) - HARDCODED
 # -------------------------------------------------------------------
 DATABASES = {
     'default': {
@@ -95,23 +93,24 @@ DATABASES = {
 }
 
 # -------------------------------------------------------------------
-# Cloudinary Storage (for images & videos)
+# Cloudinary Storage - HARDCODED
 # -------------------------------------------------------------------
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('dp1gkt6tp'),
-    'API_KEY': os.getenv('542787591385464'),
-    'API_SECRET': os.getenv('WgzVxby9l4PdZPiXc26u2AkZlLI'),
+    'CLOUD_NAME': 'dp1gkt6tp',
+    'API_KEY': '542787591385464',
+    'API_SECRET': 'WgzVxby9l4PdZPiXc26u2AkZlLI',
 }
+
+cloudinary.config( 
+    cloud_name='dp1gkt6tp',
+    api_key='542787591385464',
+    api_secret='WgzVxby9l4PdZPiXc26u2AkZlLI',
+    secure=True
+)
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 MEDIA_URL = '/media/'
 
-cloudinary.config( 
-  cloud_name = "dp1gkt6tp",       # e.g. "djd123abc"
-  api_key = "542787591385464",             # from your Cloudinary dashboard
-  api_secret = "WgzVxby9l4PdZPiXc26u2AkZlLI",       # from your Cloudinary dashboard
-  secure = True
-)
 # -------------------------------------------------------------------
 # Static Files
 # -------------------------------------------------------------------
