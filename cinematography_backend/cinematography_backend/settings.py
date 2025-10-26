@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'cloudinary',
     'cloudinary_storage',
-    
+    #comenttttttttttttttttt
     # Local apps
     'services',
     'portfolio',
