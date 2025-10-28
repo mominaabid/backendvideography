@@ -1,11 +1,11 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
-from cloudinary.models import CloudinaryField  # ✅ Add this
+from cloudinary.models import CloudinaryField
 
 # ---------------- MediaFile ----------------
 class MediaFile(models.Model):
     title = models.CharField(max_length=255)
-    file = CloudinaryField('file', blank=True, null=True)  # ✅ CloudinaryField replaces FileField
+    file = CloudinaryField('file', blank=True, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -25,8 +25,14 @@ class Service(models.Model):
     title = models.CharField(max_length=100)
     icon = models.CharField(max_length=50, choices=ICON_CHOICES, default='Camera')
 
-    # ✅ Cloudinary handles video storage
-    video = CloudinaryField('video', blank=True, null=True)
+    # ✅ Fixed: CloudinaryField with resource_type for video
+    video = CloudinaryField(
+        'video', 
+        blank=True, 
+        null=True,
+        resource_type='video',  # ✅ CRITICAL: Specify resource_type
+        type='upload'
+    )
 
     description = models.TextField(help_text='Main service description')
     is_active = models.BooleanField(default=True, help_text='Display this service on the website')

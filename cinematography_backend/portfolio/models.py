@@ -1,11 +1,11 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
-from cloudinary.models import CloudinaryField  # ✅ Add this
+from cloudinary.models import CloudinaryField
 
 # ---------------- Media Uploads ----------------
 class MediaFile(models.Model):
     title = models.CharField(max_length=255)
-    file = CloudinaryField('file', blank=True, null=True)  # ✅ Cloudinary replaces FileField
+    file = CloudinaryField('file', blank=True, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -37,8 +37,14 @@ class PortfolioCategory(models.Model):
 
 # ---------------- Hero Slides ----------------
 class HeroSlide(models.Model):
-    image = CloudinaryField('image', blank=True, null=True)  # ✅ Cloudinary image
-    video = CloudinaryField('video', blank=True, null=True)  # ✅ Cloudinary video
+    image = CloudinaryField('image', blank=True, null=True)
+    video = CloudinaryField(
+        'video', 
+        blank=True, 
+        null=True,
+        resource_type='video',
+        type='upload'
+    )
     title = models.CharField(max_length=100)
     category = models.ForeignKey(PortfolioCategory, on_delete=models.SET_NULL, null=True, blank=True)
     views = models.CharField(max_length=10, default='0', help_text='e.g., 25K')
@@ -60,8 +66,14 @@ class HeroSlide(models.Model):
 class Project(models.Model):
     title = models.CharField(max_length=100)
     category = models.ForeignKey(PortfolioCategory, on_delete=models.CASCADE, related_name='projects')
-    thumbnail = CloudinaryField('image', blank=True, null=True)  # ✅ Cloudinary image
-    video = CloudinaryField('video', blank=True, null=True)      # ✅ Cloudinary video
+    thumbnail = CloudinaryField('image', blank=True, null=True)
+    video = CloudinaryField(
+        'video', 
+        blank=True, 
+        null=True,
+        resource_type='video',
+        type='upload'
+    ) 
     description = models.TextField(help_text='Project description')
     views = models.CharField(max_length=10, default='0', help_text='e.g., 12.5K')
     likes = models.CharField(max_length=10, default='0', help_text='e.g., 2.1K')
