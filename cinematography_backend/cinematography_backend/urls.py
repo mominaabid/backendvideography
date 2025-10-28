@@ -17,7 +17,7 @@ static = importlib.import_module('django.conf.urls.static').static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/portfolio/', include('portfolio.urls')),
-    path('api/services/', include('services.urls')),
+    path('api/', include('services.urls')),
     path('api/about/', include('about.urls')),
     path('api/contact/', include('contact.urls')),
     path('api/', include('project.urls')),
