@@ -3,89 +3,87 @@
 from rest_framework import serializers
 from .models import PortfolioCategory, HeroSlide, Project
 
-
 # ---------------- Hero Slide ----------------
 class HeroSlideSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
     video_url = serializers.SerializerMethodField()
+    category_info = serializers.SerializerMethodField()
 
     class Meta:
         model = HeroSlide
         fields = [
             'id', 'image', 'image_url', 'video', 'video_url',
-            'title', 'category', 'views', 'order', 'is_active',
+            'title', 'category', 'category_info', 'views', 'order', 'is_active',
             'created_at', 'updated_at'
         ]
 
     def get_image_url(self, obj):
-        """Return Cloudinary image URL"""
         try:
-            if obj.image:
-                return obj.image.url
+            return obj.image.url if obj.image else None
         except:
             return None
-        return None
 
     def get_video_url(self, obj):
-        """Return Cloudinary video URL"""
         try:
-            if obj.video:
-                return obj.video.url
+            return obj.video.url if obj.video else None
         except:
             return None
-        return None
 
+    def get_category_info(self, obj):
+        if obj.category:
+            return {
+                "id": obj.category.id,
+                "name": obj.category.name,
+                "icon": obj.category.icon
+            }
+        return None
 
 # ---------------- Project ----------------
 class ProjectSerializer(serializers.ModelSerializer):
     video_url = serializers.SerializerMethodField()
-    image_url = serializers.SerializerMethodField()
     thumbnail_url = serializers.SerializerMethodField()
+    category_info = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
         fields = [
-            'id', 'title', 'category', 'thumbnail', 'thumbnail_url',
-            'video', 'video_url', 'image', 'image_url',
-            'description', 'views', 'likes', 'order',
+            'id', 'title', 'category', 'category_info', 'thumbnail', 'thumbnail_url',
+            'video', 'video_url', 'description', 'views', 'likes', 'order',
             'is_active', 'created_at', 'updated_at'
         ]
 
     def get_video_url(self, obj):
-        """Return Cloudinary video URL"""
         try:
-            if obj.video:
-                return obj.video.url
+            return obj.video.url if obj.video else None
         except:
             return None
-        return None
-
-    def get_image_url(self, obj):
-        """Return Cloudinary image URL"""
-        try:
-            if obj.image:
-                return obj.image.url
-        except:
-            return None
-        return None
 
     def get_thumbnail_url(self, obj):
-        """Return Cloudinary thumbnail URL"""
         try:
-            if obj.thumbnail:
-                return obj.thumbnail.url
+            return obj.thumbnail.url if obj.thumbnail else None
         except:
             return None
-        return None
 
+    def get_category_info(self, obj):
+        if obj.category:
+            return {
+                "id": obj.category.id,
+                "name": obj.category.name,
+                "icon": obj.category.icon
+            }
+        return None
 
 # ---------------- Portfolio Category ----------------
 class PortfolioCategorySerializer(serializers.ModelSerializer):
-    projects = ProjectSerializer(many=True, read_only=True)
+    projects = serializers.SerializerMethodField()
 
     class Meta:
         model = PortfolioCategory
         fields = [
-            'id', 'name', 'icon', 'count',
-            'projects', 'order', 'is_active'
+            'id', 'name', 'icon', 'count', 'projects', 'order', 'is_active'
         ]
+
+    def get_projects(self, obj):
+        # Only return active projects, ordered by 'order' and 'title'
+        projects = obj.projects.filter(is_active=True).order_by('order', 'title')
+        return ProjectSerializer(projects, many=True).data

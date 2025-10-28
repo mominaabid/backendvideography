@@ -16,19 +16,18 @@ static = importlib.import_module('django.conf.urls.static').static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('services.urls')),
+    path('api/portfolio/', include('portfolio.urls')),
+    path('api/services/', include('services.urls')),
+    path('api/about/', include('about.urls')),
+    path('api/contact/', include('contact.urls')),
+    path('api/project/', include('project.urls')),
+    path('api/home/', include('home.urls')),
+    # If you want non-API versions:
     path('portfolio/', include('portfolio.urls')),
     path('about/', include('about.urls')),
-    path('api/contact/', include('contact.urls')), 
+    path('contact/', include('contact.urls')),
     path('home/', include('home.urls')),
-    path('api/', include('project.urls')),
-    path('api/services/', include('services.urls')),
-    path('api/services/', include('about.urls')),
-    path('api/services/', include('contact.urls')),
-    path('api/services/', include('services.urls')),
-    path('api/services/', include('home.urls')),
-    path('api/services/', include('portfolio.urls')),
-    path('api/services/', include('project.urls')),
+    path('project/', include('project.urls')),
 ]
 
 # Serve media files in development

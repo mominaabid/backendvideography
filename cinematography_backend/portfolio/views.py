@@ -2,14 +2,15 @@
 
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import PortfolioCategory, HeroSlide, Project
-from .serializers import PortfolioCategorySerializer, HeroSlideSerializer, ProjectSerializer
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import MediaFile
 
+from .models import PortfolioCategory, HeroSlide, Project, MediaFile
+from .serializers import PortfolioCategorySerializer, HeroSlideSerializer, ProjectSerializer
+
+
+# ---------------- Media Upload ----------------
 class UploadMediaView(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
@@ -24,10 +25,11 @@ class UploadMediaView(APIView):
         return Response({
             "id": media.id,
             "title": media.title,
-            "file_url": media.file.url,
+            "file_url": getattr(media.file, 'url', None),
         })
 
 
+# ---------------- Portfolio Categories ----------------
 class PortfolioCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = PortfolioCategory.objects.filter(is_active=True).prefetch_related('projects')
     serializer_class = PortfolioCategorySerializer
@@ -37,15 +39,20 @@ class PortfolioCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ['order']
 
 
+# ---------------- Hero Slides ----------------
 class HeroSlideViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = HeroSlide.objects.filter(is_active=True)
+    queryset = HeroSlide.objects.filter(is_active=True).select_related('category')
     serializer_class = HeroSlideSerializer
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['order', 'title']
     ordering = ['order']
 
 
+# ---------------- Projects ----------------
 class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Project.objects.filter(is_active=True)
+    queryset = Project.objects.filter(is_active=True).select_related('category')
     serializer_class = ProjectSerializer
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
     filterset_fields = ['category']
+    ordering_fields = ['order', 'title']
     ordering = ['order']

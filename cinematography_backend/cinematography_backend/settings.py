@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-your-secret-key-here-change-this-later-12345'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'cloudinary_storage',
     'cloudinary',
+    'django_extensions',
+    'django_filters',
     
     # Local apps
     'services',
@@ -156,6 +158,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
+    
 }
 
 # -------------------------------------------------------------------
