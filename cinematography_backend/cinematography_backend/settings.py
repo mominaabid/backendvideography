@@ -117,14 +117,14 @@ MEDIA_URL = '/media/'
 # -------------------------------------------------------------------
 # Static Files
 # -------------------------------------------------------------------
+# -------------------------------------------------------------------
+# Static Files (Fixed for Vercel)
+# -------------------------------------------------------------------
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Create static directory if it doesn't exist
-if not os.path.exists(os.path.join(BASE_DIR, 'static')):
-    os.makedirs(os.path.join(BASE_DIR, 'static'))
-
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+# Use WhiteNoise for static file serving
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # -------------------------------------------------------------------
