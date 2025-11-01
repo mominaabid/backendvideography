@@ -22,6 +22,7 @@ urlpatterns = [
     path('api/contact/', include('contact.urls')),
     path('api/', include('project.urls')),
     path('api/home/', include('home.urls')),
+    path('', include('logo.urls')),
     # If you want non-API versions:
     path('portfolio/', include('portfolio.urls')),
     path('about/', include('about.urls')),
