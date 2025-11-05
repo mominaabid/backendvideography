@@ -6,8 +6,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from .models import PortfolioCategory, HeroSlide, Project, MediaFile
-from .serializers import PortfolioCategorySerializer, HeroSlideSerializer, ProjectSerializer
+from .models import PortfolioCategory, Project, MediaFile
+from .serializers import PortfolioCategorySerializer, ProjectSerializer
 
 
 # ---------------- Media Upload ----------------
@@ -38,14 +38,6 @@ class PortfolioCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['name']
     ordering = ['order']
 
-
-# ---------------- Hero Slides ----------------
-class HeroSlideViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = HeroSlide.objects.filter(is_active=True).select_related('category')
-    serializer_class = HeroSlideSerializer
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['order', 'title']
-    ordering = ['order']
 
 
 # ---------------- Projects ----------------

@@ -1,42 +1,8 @@
 # portfolio/serializers.py
 
 from rest_framework import serializers
-from .models import PortfolioCategory, HeroSlide, Project
+from .models import PortfolioCategory, Project
 
-# ---------------- Hero Slide ----------------
-class HeroSlideSerializer(serializers.ModelSerializer):
-    image_url = serializers.SerializerMethodField()
-    video_url = serializers.SerializerMethodField()
-    category_info = serializers.SerializerMethodField()
-
-    class Meta:
-        model = HeroSlide
-        fields = [
-            'id', 'image', 'image_url', 'video', 'video_url',
-            'title', 'category', 'category_info', 'views', 'order', 'is_active',
-            'created_at', 'updated_at'
-        ]
-
-    def get_image_url(self, obj):
-        try:
-            return obj.image.url if obj.image else None
-        except:
-            return None
-
-    def get_video_url(self, obj):
-        try:
-            return obj.video.url if obj.video else None
-        except:
-            return None
-
-    def get_category_info(self, obj):
-        if obj.category:
-            return {
-                "id": obj.category.id,
-                "name": obj.category.name,
-                "icon": obj.category.icon
-            }
-        return None
 
 # ---------------- Project ----------------
 class ProjectSerializer(serializers.ModelSerializer):

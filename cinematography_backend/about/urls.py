@@ -1,10 +1,9 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import AboutHeroViewSet, StatViewSet, CoreValueViewSet, TimelineEventViewSet, SkillViewSet, AboutCTAViewSet, AboutTabContentViewSet
+from .views import StatViewSet, CoreValueViewSet, TimelineEventViewSet, SkillViewSet, AboutCTAViewSet, AboutTabContentViewSet
 from .views import UploadMediaView
 
 router = DefaultRouter()
-router.register(r'hero', AboutHeroViewSet, basename='about_hero')
 router.register(r'stats', StatViewSet, basename='stat')
 router.register(r'core-values', CoreValueViewSet, basename='core_value')
 router.register(r'timeline', TimelineEventViewSet, basename='timeline_event')

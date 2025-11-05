@@ -2,33 +2,7 @@
 
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import AboutHero, Stat, CoreValue, TimelineEvent, Skill, AboutCTA, AboutTabContent
-
-@admin.register(AboutHero)
-class AboutHeroAdmin(admin.ModelAdmin):
-    list_display = ['title', 'video_preview', 'is_active', 'updated_at']
-    list_filter = ['is_active']
-    search_fields = ['title', 'subtitle']
-    list_editable = ['is_active']
-
-    fieldsets = (
-        ('Hero Information', {
-            'fields': ('title', 'subtitle', 'video', 'button_text')
-        }),
-        ('Display Settings', {
-            'fields': ('is_active',)
-        }),
-    )
-
-    def video_preview(self, obj):
-        if obj.video:
-            return format_html(
-                '<video width="100" height="60" controls>'
-                '<source src="{}" type="video/mp4"></video>',
-                obj.video.url
-            )
-        return "No video"
-    video_preview.short_description = 'Video Preview'
+from .models import Stat, CoreValue, TimelineEvent, Skill, AboutCTA, AboutTabContent
 
 @admin.register(Stat)
 class StatAdmin(admin.ModelAdmin):

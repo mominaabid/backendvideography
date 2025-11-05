@@ -8,13 +8,7 @@ from .models import AboutHero, Stat, CoreValue, TimelineEvent, Skill, AboutCTA, 
 class AboutApiTests(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.hero = AboutHero.objects.create(
-            title="Turning Moments Into Timeless Art",
-            subtitle="I'm Alex Rodriguez, a passionate videographer...",
-            video="test.mp4",
-            button_text="Watch My Story",
-            is_active=True
-        )
+    
         self.stat = Stat.objects.create(
             name="Projects",
             value="4M",  # Updated to alphanumeric
@@ -66,12 +60,6 @@ class AboutApiTests(TestCase):
         self.assertEqual(response.data[0]['value'], "4M")  # Updated to check alphanumeric
         self.assertEqual(response.data[0]['suffix'], "")   # Updated to check empty suffix
 
-    def test_about_hero_list(self):
-        response = self.client.get('/about/hero/')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['title'], "Turning Moments Into Timeless Art")
-
     def test_core_value_list(self):
         response = self.client.get('/about/core-values/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -103,7 +91,6 @@ class AboutApiTests(TestCase):
         self.assertEqual(response.data[0]['tab_name'], "story")
 
     def tearDown(self):
-        self.hero.delete()
         self.stat.delete()
         self.core_value.delete()
         self.timeline_event.delete()

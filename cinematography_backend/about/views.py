@@ -1,8 +1,8 @@
 # about/views.py (Updated)
 
 from rest_framework import viewsets, filters
-from .models import AboutHero, Stat, CoreValue, TimelineEvent, Skill, AboutCTA, AboutTabContent
-from .serializers import AboutHeroSerializer, StatSerializer, CoreValueSerializer, TimelineEventSerializer, SkillSerializer, AboutCTASerializer, AboutTabContentSerializer
+from .models import Stat, CoreValue, TimelineEvent, Skill, AboutCTA, AboutTabContent
+from .serializers import StatSerializer, CoreValueSerializer, TimelineEventSerializer, SkillSerializer, AboutCTASerializer, AboutTabContentSerializer
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -25,11 +25,6 @@ class UploadMediaView(APIView):
             "title": media.title,
             "file_url": media.file.url,
         })
-
-class AboutHeroViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = AboutHero.objects.filter(is_active=True)
-    serializer_class = AboutHeroSerializer
-    ordering = ['created_at']
 
 class StatViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Stat.objects.filter(is_active=True)

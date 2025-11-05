@@ -35,33 +35,6 @@ class PortfolioCategory(models.Model):
         return self.name
 
 
-# ---------------- Hero Slides ----------------
-class HeroSlide(models.Model):
-    image = CloudinaryField('image', blank=True, null=True)
-    video = CloudinaryField(
-        'video', 
-        blank=True, 
-        null=True,
-        resource_type='video',
-        type='upload'
-    )
-    title = models.CharField(max_length=100)
-    category = models.ForeignKey(PortfolioCategory, on_delete=models.SET_NULL, null=True, blank=True)
-    views = models.CharField(max_length=10, default='0', help_text='e.g., 25K')
-    order = models.IntegerField(default=0, help_text='Display order (lower numbers appear first)')
-    is_active = models.BooleanField(default=True, help_text='Display this slide on the website')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['order', 'title']
-        verbose_name = 'Hero Slide'
-        verbose_name_plural = 'Hero Slides'
-
-    def __str__(self):
-        return self.title
-
-
 # ---------------- Projects ----------------
 class Project(models.Model):
     title = models.CharField(max_length=100)

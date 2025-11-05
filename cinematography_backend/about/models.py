@@ -2,35 +2,6 @@ from django.db import models
 from django.core.validators import FileExtensionValidator, MaxValueValidator, MinValueValidator
 from cloudinary.models import CloudinaryField
 
-# ---------------- About Hero ----------------
-class AboutHero(models.Model):
-    title = models.CharField(
-        max_length=200,
-        help_text="Main title for the hero section (e.g., 'Turning Moments Into Timeless Art')"
-    )
-    subtitle = models.TextField(help_text="Subtitle or description for the hero section")
-
-    # ✅ Use CloudinaryField for videos
-    video = CloudinaryField(
-        resource_type='video',
-        blank=True,
-        null=True,
-        help_text="Upload hero section background video"
-    )
-
-    button_text = models.CharField(max_length=100, default="Watch My Story", help_text="Text for the hero section button")
-    is_active = models.BooleanField(default=True, help_text="Display this hero content on the website")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = "About Hero"
-        verbose_name_plural = "About Hero Sections"
-
-    def __str__(self):
-        return self.title
-
-
 # ---------------- Stats ----------------
 class Stat(models.Model):
     name = models.CharField(max_length=100, help_text="e.g., Projects, Happy Clients")

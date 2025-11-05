@@ -1,32 +1,5 @@
 from rest_framework import serializers
-from .models import AboutHero, Stat, CoreValue, TimelineEvent, Skill, AboutCTA, AboutTabContent
-
-
-class AboutHeroSerializer(serializers.ModelSerializer):
-    video_url = serializers.SerializerMethodField()
-
-    class Meta:
-        model = AboutHero
-        fields = [
-            'id',
-            'title',
-            'subtitle',
-            'video',
-            'video_url',
-            'button_text',
-            'is_active',
-            'created_at',
-            'updated_at'
-        ]
-
-    def get_video_url(self, obj):
-        if obj.video:
-            try:
-                return obj.video.url  # ✅ CloudinaryField has .url property
-            except:
-                return None
-        return None
-
+from .models import Stat, CoreValue, TimelineEvent, Skill, AboutCTA, AboutTabContent
 
 class StatSerializer(serializers.ModelSerializer):
     class Meta:
