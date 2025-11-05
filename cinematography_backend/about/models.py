@@ -34,8 +34,8 @@ class AboutHero(models.Model):
 # ---------------- Stats ----------------
 class Stat(models.Model):
     name = models.CharField(max_length=100, help_text="e.g., Projects, Happy Clients")
-    value = models.PositiveIntegerField(default=0, help_text="Numeric value for the stat (e.g., 500)")
-    suffix = models.CharField(max_length=10, default="+", help_text="Suffix for the stat (e.g., '+')")
+    value = models.CharField(max_length=20, help_text="Value for the stat (e.g., '4M', '500+')")  # Changed to CharField
+    suffix = models.CharField(max_length=10, default="", help_text="Optional suffix for the stat (e.g., '+')")  # Made optional
     icon = models.CharField(max_length=50, choices=[
         ('Briefcase', 'Briefcase'),
         ('Users', 'Users'),
@@ -52,7 +52,6 @@ class Stat(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.value}{self.suffix}"
-
 
 # ---------------- Core Values ----------------
 class CoreValue(models.Model):

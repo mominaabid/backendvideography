@@ -15,7 +15,14 @@ class AboutApiTests(TestCase):
             button_text="Watch My Story",
             is_active=True
         )
-        self.stat = Stat.objects.create(name="Projects", value=500, suffix="+", icon="Briefcase", order=1, is_active=True)
+        self.stat = Stat.objects.create(
+            name="Projects",
+            value="4M",  # Updated to alphanumeric
+            suffix="",   # Optional suffix
+            icon="Briefcase",
+            order=1,
+            is_active=True
+        )
         self.core_value = CoreValue.objects.create(
             title="Passion-Driven",
             description="Every project is approached with genuine enthusiasm",
@@ -51,17 +58,19 @@ class AboutApiTests(TestCase):
             is_active=True
         )
 
-    def test_about_hero_list(self):
-        response = self.client.get('/about/hero/')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['title'], "Turning Moments Into Timeless Art")
-
     def test_stat_list(self):
         response = self.client.get('/about/stats/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['name'], "Projects")
+        self.assertEqual(response.data[0]['value'], "4M")  # Updated to check alphanumeric
+        self.assertEqual(response.data[0]['suffix'], "")   # Updated to check empty suffix
+
+    def test_about_hero_list(self):
+        response = self.client.get('/about/hero/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['title'], "Turning Moments Into Timeless Art")
 
     def test_core_value_list(self):
         response = self.client.get('/about/core-values/')
