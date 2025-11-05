@@ -19,8 +19,8 @@ class HomeApiTests(TestCase):
         )
         self.stat = HomeStat.objects.create(
             name="Projects Completed",
-            value=500,
-            suffix="+",
+            value="4M",  # Changed to alphanumeric value
+            suffix="",  # Empty suffix since "M" is in value
             icon="Calendar",
             order=1,
             is_active=True
@@ -86,6 +86,8 @@ class HomeApiTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['name'], "Projects Completed")
+        self.assertEqual(response.data[0]['value'], "4M")
+        self.assertEqual(response.data[0]['suffix'], "")
 
     def test_home_intro_list(self):
         response = self.client.get('/home/intro/')
@@ -128,6 +130,21 @@ class HomeApiTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['title'], "Ready to Start Your Project?")
+
+    def test_home_stat_invalid_value(self):
+        # Note: This test assumes HomeStatViewSet is changed to ModelViewSet to allow POST requests.
+        # If it remains ReadOnlyModelViewSet, this test will fail unless you create the object differently.
+        data = {
+            "name": "Invalid Stat",
+            "value": "abc",  # Invalid value
+            "suffix": "",
+            "icon": "Calendar",
+            "order": 2,
+            "is_active": True
+        }
+        response = self.client.post('/home/stats/', data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("Value must be a number optionally followed by 'M' or 'K'", str(response.data))
 
     def tearDown(self):
         self.hero.delete()

@@ -36,10 +36,18 @@ class HomeHeroSerializer(serializers.ModelSerializer):
 
 
 # ---------------- Home Stats ----------------
+# home/serializers.py
 class HomeStatSerializer(serializers.ModelSerializer):
     class Meta:
         model = HomeStat
         fields = ['id', 'name', 'value', 'suffix', 'icon', 'order', 'is_active']
+
+    def validate_value(self, value):
+        """Validate that the value is a number optionally followed by a suffix like M or K."""
+        import re
+        if not re.match(r'^\d+[MK]?$', value):
+            raise serializers.ValidationError("Value must be a number optionally followed by 'M' or 'K' (e.g., '4M', '500', '10K').")
+        return value
 
 
 # ---------------- Home Intro ----------------

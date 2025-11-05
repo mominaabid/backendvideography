@@ -48,11 +48,12 @@ class HomeHero(models.Model):
 
 
 # ---------------- Home Stats ----------------
+
 class HomeStat(models.Model):
     name = models.CharField(max_length=100, help_text="e.g., Projects Completed")
-    value = models.PositiveIntegerField(default=0, help_text="Numeric value for the stat (e.g., 500)")
-    suffix = models.CharField(max_length=10, default="+", help_text="Suffix for the stat (e.g., '+')")
-    icon = models.CharField(
+    value = models.CharField(max_length=20, help_text="Value for the stat (e.g., 500, 4M, 10K)")
+    suffix = models.CharField(max_length=10, default="", help_text="Suffix for the stat (optional, e.g., '+')")
+    icon = models.CharField(  # Changed from CloudinaryField to CharField as per your context
         max_length=50,
         choices=[
             ('Calendar', 'Calendar'),
