@@ -23,17 +23,20 @@ class Stat(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.value}{self.suffix}"
-
-# ---------------- Core Values ----------------
+#######################################################
 class CoreValue(models.Model):
-    title = models.CharField(max_length=100, help_text="e.g., Passion-Driven")
+    title = models.CharField(max_length=100, help_text="e.g., Creative Precision")
     description = models.TextField(help_text="Description of the core value")
-    icon = models.CharField(max_length=50, choices=[
-        ('Heart', 'Heart'),
-        ('Eye', 'Eye'),
-        ('Lightbulb', 'Lightbulb'),
-        ('Users', 'Users'),
-    ], default='Heart')
+    icon = models.CharField(
+        max_length=50,
+        choices=[
+             ('Film', 'Film - Creative Precision'),
+            ('Users', 'Users - Clarity in Collaboration'),
+            ('Heart', 'Heart - Calm Problem-Solving'),
+            ('Lightbulb', 'Lightbulb - Growth-Driven Mindset'),
+        ],
+        default='Heart'
+    )
     order = models.PositiveIntegerField(default=0, help_text="Display order (lower numbers appear first)")
     is_active = models.BooleanField(default=True, help_text="Display this core value on the website")
 
@@ -44,6 +47,7 @@ class CoreValue(models.Model):
 
     def __str__(self):
         return self.title
+
 
 
 # ---------------- Timeline ----------------

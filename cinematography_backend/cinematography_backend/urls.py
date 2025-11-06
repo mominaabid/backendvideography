@@ -23,6 +23,7 @@ urlpatterns = [
     path('api/', include('project.urls')),
     path('api/home/', include('home.urls')),
     path('', include('logo.urls')),
+    path('api/', include('cv_upload.urls')),
     # If you want non-API versions:
     path('portfolio/', include('portfolio.urls')),
     path('about/', include('about.urls')),

@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-your-secret-key-here-change-this-later-12345'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['.vercel.app', '.now.sh', 'localhost', '127.0.0.1', '*']
 
@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'contact',
     'home',
     'project',
-    'logo'
+    'logo',
+    'cv_upload'
 ]
 
 MIDDLEWARE = [
@@ -103,6 +104,7 @@ CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dp1gkt6tp',
     'API_KEY': '542787591385464',
     'API_SECRET': 'WgzVxby9l4PdZPiXc26u2AkZlLI',
+  
 }
 
 cloudinary.config( 
@@ -110,6 +112,7 @@ cloudinary.config(
     api_key='542787591385464',
     api_secret='WgzVxby9l4PdZPiXc26u2AkZlLI',
     secure=True
+    
 )
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
