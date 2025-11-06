@@ -118,15 +118,15 @@ class AboutCTA(models.Model):
 class AboutTabContent(models.Model):
     TAB_CHOICES = [
         ('story', 'Story'),
+        ('process', 'Process'),
         ('philosophy', 'Philosophy'),
-        ('approach', 'Approach'),
     ]
 
     tab_name = models.CharField(
         max_length=50,
         choices=TAB_CHOICES,
         unique=True,
-        help_text="Name of the tab (Story, Philosophy, or Approach)"
+        help_text="Name of the tab (Story, Philosophy, or Process)"
     )
     title = models.CharField(max_length=100, help_text="e.g., My Journey")
     content = models.TextField(help_text="Content for the tab, supports multiple paragraphs separated by newlines")
